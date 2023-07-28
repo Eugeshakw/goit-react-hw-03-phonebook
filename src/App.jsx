@@ -18,6 +18,28 @@ export class App extends React.Component {
     filter: '',
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log('did update');
+    if (this.state.contacts !== prevState.contacts){
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+      console.log('обновился стейт');
+    }
+    console.log(prevState);
+    console.log(this.state);
+  }
+  componentDidMount(){
+    console.log('did mount');
+    const contact = localStorage.getItem('contacts');
+    const contactSave = JSON.parse(contact)
+    if (contact){
+      this.setState({contacts: contactSave})
+    }
+    
+    console.log(contactSave);
+  }
+
+
+
   onChangeFilter = ({ target: { value } }) => {
     this.setState({
       filter: value,
@@ -51,6 +73,7 @@ export class App extends React.Component {
   };
 
   render() {
+    console.log('app render');
     const filteredContacts = this.state.contacts.filter(
       contact =>
         filterByString(contact.name, this.state.filter) ||
